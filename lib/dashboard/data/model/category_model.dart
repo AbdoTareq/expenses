@@ -33,7 +33,7 @@ class CategoryModel {
     };
   }
 
-  factory CategoryModel.fromMap(Map<String, dynamic> map) {
+  factory CategoryModel.fromJson(Map<dynamic, dynamic> map) {
     return CategoryModel(
       name: (map['name'] ?? '') as String,
       icon: (map['icon'] ?? '') as String,

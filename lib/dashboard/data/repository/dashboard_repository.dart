@@ -42,22 +42,28 @@ class DashboardRepositoryImp extends DashboardRepository {
       } catch (e) {
         Logger().e(e);
         if (await local.containsKey('expenses')) {
+          Logger().i('cashed Data');
+          final List<dynamic> res =
+              (await local.read('expenses')
+                  as Map<dynamic, dynamic>)['expenses'];
           return Right(
-            (local.read('expenses') as List)
-                .map((expense) => ExpenseModel.fromJson(expense))
-                .toList(),
+            res.map((expense) => ExpenseModel.fromJson(expense)).toList(),
           );
         } else {
+          Logger().i('mocked Data');
           final mockedRes = await mocked.getExpense(filter);
+          local.write('expenses', {
+            'expenses': mockedRes.map((expense) => expense.toJson()).toList(),
+          });
           return Right(mockedRes);
         }
       }
     } else {
       if (await local.containsKey('expenses')) {
+        final List<dynamic> res =
+            (await local.read('expenses') as Map<dynamic, dynamic>)['expenses'];
         return Right(
-          (local.read('expenses') as List)
-              .map((expense) => ExpenseModel.fromJson(expense))
-              .toList(),
+          res.map((expense) => ExpenseModel.fromJson(expense)).toList(),
         );
       }
       return const Left(

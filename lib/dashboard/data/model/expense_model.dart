@@ -31,7 +31,7 @@ class ExpenseModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'id': id,
       'category': category.toMap(),
@@ -41,10 +41,12 @@ class ExpenseModel {
     };
   }
 
-  factory ExpenseModel.fromJson(Map<String, dynamic> map) {
+  factory ExpenseModel.fromJson(Map<dynamic, dynamic> map) {
     return ExpenseModel(
       id: (map['id'] ?? '') as String,
-      category: CategoryModel.fromMap(map['category'] as Map<String, dynamic>),
+      category: CategoryModel.fromJson(
+        map['category'] as Map<dynamic, dynamic>,
+      ),
       date: (map['date'] ?? '') as String,
       amount: (map['amount'] ?? '') as String,
       receipt: (map['receipt'] ?? '') as String,
@@ -54,15 +56,5 @@ class ExpenseModel {
   @override
   String toString() {
     return 'ExpenseModel(id: $id, category: $category, date: $date, amount: $amount, receipt: $receipt)';
-  }
-
-  factory ExpenseModel.fromMap(Map<String, dynamic> map) {
-    return ExpenseModel(
-      id: (map['id'] ?? '') as String,
-      category: CategoryModel.fromMap(map['category'] as Map<String, dynamic>),
-      date: (map['date'] ?? '') as String,
-      amount: (map['amount'] ?? '') as String,
-      receipt: (map['receipt'] ?? '') as String,
-    );
   }
 }
