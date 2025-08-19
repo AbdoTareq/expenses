@@ -34,10 +34,12 @@ class ExpenseItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: (getColorFromHex(item.color)).withOpacity(0.2),
+                backgroundColor: (getColorFromHex(
+                  item.category.color,
+                )).withValues(alpha: 0.2),
                 child: Icon(
                   getIconFromString(item.category.icon),
-                  color: (getColorFromHex(item.color)),
+                  color: (getColorFromHex(item.category.color)),
                   size: 22,
                 ),
               ),
@@ -46,7 +48,7 @@ class ExpenseItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.name,
+                    item.category.name,
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.w600,

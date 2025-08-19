@@ -82,7 +82,9 @@ class _DashboardPageState extends State<DashboardPage> {
                               ),
                               initialItem: 'This month',
                               items: ['This month', 'Last month', 'Last year'],
-                              onChanged: (p0) {},
+                              onChanged: (p0) {
+                                bloc.add(GetExpenses(filter: p0!));
+                              },
                             ),
                           ),
                         ),
@@ -113,18 +115,29 @@ class _DashboardPageState extends State<DashboardPage> {
               ),
             ),
             SizedBox(height: 20.h),
-            BlocBuilder<DashboardBloc, DashboardState>(
-              builder: (context, state) {
-                if (state.status == RxStatus.loading) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (state.status == RxStatus.empty) {
-                  return Center(child: Text('No expenses found'));
-                } else if (state.status == RxStatus.error) {
-                  return Center(child: Text(state.errorMessage.toString()));
-                } else {
-                  return Container();
-                }
-              },
+            Expanded(
+              child: BlocBuilder<DashboardBloc, DashboardState>(
+                builder: (context, state) {
+                  if (state.status == RxStatus.loading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state.status == RxStatus.empty) {
+                    return Center(child: Text('No expenses found'));
+                  } else if (state.status == RxStatus.error) {
+                    return Center(child: Text(state.errorMessage.toString()));
+                  } else {
+                    return ListView.separated(
+                      padding: EdgeInsets.zero,
+                      itemCount: state.expenses?.length ?? 0,
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(height: 10.h);
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return ExpenseItem(item: state.expenses![index]);
+                      },
+                    );
+                  }
+                },
+              ),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:expenses/dashboard/data/repository/mocked_network.dart';
 import 'package:logger/web.dart';
 
 import 'package:expenses/core/datasources/local/local_data_source.dart';
@@ -14,11 +15,13 @@ abstract class DashboardRepository {
 
 class DashboardRepositoryImp extends DashboardRepository {
   final NetworkInterface remote;
+  final MockedNetwork mocked;
   final LocalDataSource local;
   final NetworkInfo networkInfo;
 
   DashboardRepositoryImp({
     required this.remote,
+    required this.mocked,
     required this.local,
     required this.networkInfo,
   });
@@ -34,19 +37,20 @@ class DashboardRepositoryImp extends DashboardRepository {
                 .map((expense) => ExpenseModel.fromJson(expense))
                 .toList(),
           );
-        } else {
-          if (await local.containsKey('expenses')) {
-            return Right(
-              (local.read('expenses') as List)
-                  .map((expense) => ExpenseModel.fromJson(expense))
-                  .toList(),
-            );
-          }
         }
-        return Right([]);
+        return const Left(ServerFailure(message: 'server error', data: null));
       } catch (e) {
         Logger().e(e);
-        return Left(ServerFailure(message: e.toString(), data: e));
+        if (await local.containsKey('expenses')) {
+          return Right(
+            (local.read('expenses') as List)
+                .map((expense) => ExpenseModel.fromJson(expense))
+                .toList(),
+          );
+        } else {
+          final mockedRes = await mocked.getExpense(filter);
+          return Right(mockedRes);
+        }
       }
     } else {
       if (await local.containsKey('expenses')) {
