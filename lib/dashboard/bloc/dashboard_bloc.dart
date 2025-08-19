@@ -26,7 +26,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         res.fold(
           (l) =>
               state.copyWith(status: RxStatus.error, errorMessage: l.message),
-          (r) => DashboardState(status: RxStatus.success, expenses: r),
+          (r) => DashboardState(
+            status: r.isEmpty ? RxStatus.empty : RxStatus.success,
+            expenses: r,
+          ),
         ),
       );
     } catch (e) {

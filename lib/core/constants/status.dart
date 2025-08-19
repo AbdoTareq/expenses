@@ -1,1 +1,1 @@
-enum RxStatus { loading, success, initial, error, cashed }
+enum RxStatus { loading, success, initial, error, empty }

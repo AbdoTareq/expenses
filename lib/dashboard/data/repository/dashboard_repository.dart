@@ -13,7 +13,7 @@ abstract class DashboardRepository {
 }
 
 class DashboardRepositoryImp extends DashboardRepository {
-  final Network remote;
+  final NetworkInterface remote;
   final LocalDataSource local;
   final NetworkInfo networkInfo;
 

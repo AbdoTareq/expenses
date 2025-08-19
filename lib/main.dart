@@ -11,7 +11,6 @@ import 'package:expenses/core/sl/injection_container.dart' as sl;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('expenses');
   await sl.init();
   runApp(
     RequestsInspector(
