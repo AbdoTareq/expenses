@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:expenses/core/datasources/local/local_data_source.dart';
+import 'package:expenses/dashboard/bloc/dashboard_bloc.dart';
+import 'package:expenses/dashboard/data/repository/dashboard_repository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:requests_inspector/requests_inspector.dart';
@@ -8,29 +11,24 @@ import 'package:expenses/core/datasources/remote/network_info.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  //! Features
-  // sl.registerLazySingleton(() => LocationCubit(locationService: sl()));
   // Bloc
-  // sl.registerFactory(() => expensesCubit(getCurrentexpensesUseCase: sl()));
-
-  // Usecases
-  // sl.registerLazySingleton(() => GetCurrentexpensesUseCase(expensesRepo: sl()));
+  sl.registerLazySingleton(() => DashboardBloc(repository: sl()));
 
   // Repository
-  // sl.registerLazySingleton<expensesRepo>(
-  //   () => expensesRepoImp(networkInfo: sl(), remoteDataSource: sl()),
-  // );
+  sl.registerLazySingleton<DashboardRepository>(
+    () => DashboardRepositoryImp(remote: sl(), local: sl(), networkInfo: sl()),
+  );
 
   // Datasources
-  // sl.registerLazySingleton<expensesRemoteDataSource>(
-  //   () => expensesRemoteDataSourceImp(network: sl()),
-  // );
+  sl.registerLazySingleton<NetworkInterface>(() => Network(dio: sl()));
+  sl.registerLazySingleton<LocalDataSource>(
+    () => LocalDataSourceImpl(box: sl()),
+  );
 
   //! Core
   sl.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(connectionChecker: sl()),
   );
-  sl.registerLazySingleton<NetworkInterface>(() => Network(dio: sl()));
 
   //! External
   sl.registerLazySingleton(() => InternetConnectionChecker.createInstance());
