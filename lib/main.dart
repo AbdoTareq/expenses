@@ -1,6 +1,8 @@
+import 'package:expenses/core/constants/constants.dart';
 import 'package:expenses/core/constants/theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:requests_inspector/requests_inspector.dart';
 import 'package:expenses/core/router/app_router.dart';
@@ -26,10 +28,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: AppRouter.routes,
-      title: 'Expenses App',
-      theme: lightTheme,
+    return ScreenUtilInit(
+      designSize: const Size(baseWidth, baseHeight),
+      minTextAdapt: true,
+      builder: (context, child) {
+        return MaterialApp.router(
+          routerConfig: AppRouter.routes,
+          title: 'Expenses App',
+          theme: lightTheme,
+        );
+      },
     );
   }
 }
