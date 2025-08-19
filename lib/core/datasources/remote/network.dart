@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:expenses/core/error/exceptions.dart';
-import 'package:expenses/core/network/endpoints.dart';
+import 'package:expenses/core/datasources/remote/endpoints.dart';
 
 abstract class NetworkInterface {
   Future<Response> get(String endPoint);

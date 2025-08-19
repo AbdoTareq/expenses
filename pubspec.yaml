@@ -24,6 +24,7 @@ dependencies:
   hive: ^2.2.3
   flutter_screenutil: ^5.9.3
   animated_custom_dropdown: ^3.0.0
+  logger: ^2.5.0
 
 dev_dependencies:
   flutter_test:
@@ -31,7 +32,6 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
   mocktail: ^1.0.3
-  logger: ^2.5.0
   # HTTP Inspector tool for Flutter which helps debugging http requests.
   requests_inspector: ^4.2.1
 
