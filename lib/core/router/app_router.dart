@@ -1,5 +1,5 @@
 import 'package:expenses/core/router/app_routes.dart';
-import 'package:expenses/presentation/page/dashboard_page.dart';
+import 'package:expenses/presentation/dashboard/page/dashboard_page.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRouter {
