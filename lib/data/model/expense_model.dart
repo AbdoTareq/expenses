@@ -1,4 +1,4 @@
-import 'package:expenses/dashboard/data/model/category_model.dart';
+import 'package:expenses/data/model/category_model.dart';
 
 class ExpenseModel {
   final String id;

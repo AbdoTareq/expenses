@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:expenses/core/constants/status.dart';
-import 'package:expenses/dashboard/data/model/expense_model.dart';
-import 'package:expenses/dashboard/data/repository/dashboard_repository.dart';
+import 'package:expenses/data/model/expense_model.dart';
+import 'package:expenses/data/repository/dashboard_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'dashboard_event.dart';

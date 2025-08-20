@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:expenses/core/datasources/local/local_data_source.dart';
-import 'package:expenses/dashboard/bloc/dashboard_bloc.dart';
-import 'package:expenses/dashboard/data/repository/dashboard_repository.dart';
-import 'package:expenses/dashboard/data/repository/mocked_network.dart';
+import 'package:expenses/bloc/dashboard/dashboard_bloc.dart';
+import 'package:expenses/data/repository/dashboard_repository.dart';
+import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';

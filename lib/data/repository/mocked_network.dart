@@ -1,5 +1,5 @@
-import 'package:expenses/dashboard/data/model/category_model.dart';
-import 'package:expenses/dashboard/data/model/expense_model.dart';
+import 'package:expenses/data/model/category_model.dart';
+import 'package:expenses/data/model/expense_model.dart';
 import 'package:flutter/material.dart';
 
 abstract class MockedNetwork {

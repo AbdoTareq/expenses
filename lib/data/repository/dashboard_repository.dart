@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:expenses/dashboard/data/repository/mocked_network.dart';
+import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:logger/web.dart';
 
 import 'package:expenses/core/datasources/local/local_data_source.dart';
@@ -7,7 +7,7 @@ import 'package:expenses/core/datasources/remote/endpoints.dart';
 import 'package:expenses/core/datasources/remote/network.dart';
 import 'package:expenses/core/datasources/remote/network_info.dart';
 import 'package:expenses/core/error/failures.dart';
-import 'package:expenses/dashboard/data/model/expense_model.dart';
+import 'package:expenses/data/model/expense_model.dart';
 
 abstract class DashboardRepository {
   Future<Either<Failure, List<ExpenseModel>>> getExpenses(String filter);
