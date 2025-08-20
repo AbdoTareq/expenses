@@ -9,17 +9,18 @@ import 'package:expenses/core/datasources/remote/network_info.dart';
 import 'package:expenses/core/error/failures.dart';
 import 'package:expenses/data/model/expense_model.dart';
 
-abstract class DashboardRepository {
+abstract class ExpensesRepository {
   Future<Either<Failure, List<ExpenseModel>>> getExpenses(String filter);
+  Future<Either<Failure, void>> addExpense(ExpenseModel expense);
 }
 
-class DashboardRepositoryImp extends DashboardRepository {
+class ExpensesRepositoryImp extends ExpensesRepository {
   final NetworkInterface remote;
   final MockedNetwork mocked;
   final LocalDataSource local;
   final NetworkInfo networkInfo;
 
-  DashboardRepositoryImp({
+  ExpensesRepositoryImp({
     required this.remote,
     required this.mocked,
     required this.local,
@@ -66,6 +67,29 @@ class DashboardRepositoryImp extends DashboardRepository {
           res.map((expense) => ExpenseModel.fromJson(expense)).toList(),
         );
       }
+      return const Left(
+        OfflineFailure(message: 'please connect to internet', data: null),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> addExpense(ExpenseModel expense) async {
+    if (await networkInfo.isConnected) {
+      if (await local.containsKey('expenses')) {
+        final List<dynamic> res =
+            (await local.read('expenses') as Map<dynamic, dynamic>)['expenses'];
+        var list =
+            res.map((expense) => ExpenseModel.fromJson(expense)).toList();
+        list.add(expense);
+        local.write('expenses', {
+          'expenses': list.map((expense) => expense.toJson()).toList(),
+        });
+        return Right(null);
+      } else {
+        return const Left(ServerFailure(message: 'server error', data: null));
+      }
+    } else {
       return const Left(
         OfflineFailure(message: 'please connect to internet', data: null),
       );
