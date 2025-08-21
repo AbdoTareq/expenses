@@ -5,6 +5,8 @@ class ExpenseModel {
   final CategoryModel category;
   final String date;
   final String amount;
+  final String convertedAmount;
+  final String currency;
   final String receipt;
 
   ExpenseModel({
@@ -12,6 +14,8 @@ class ExpenseModel {
     required this.category,
     required this.date,
     required this.amount,
+    required this.convertedAmount,
+    required this.currency,
     required this.receipt,
   });
 
@@ -20,6 +24,8 @@ class ExpenseModel {
     CategoryModel? category,
     String? date,
     String? amount,
+    String? convertedAmount,
+    String? currency,
     String? receipt,
   }) {
     return ExpenseModel(
@@ -27,6 +33,8 @@ class ExpenseModel {
       category: category ?? this.category,
       date: date ?? this.date,
       amount: amount ?? this.amount,
+      convertedAmount: convertedAmount ?? this.convertedAmount,
+      currency: currency ?? this.currency,
       receipt: receipt ?? this.receipt,
     );
   }
@@ -37,6 +45,7 @@ class ExpenseModel {
       'category': category.toMap(),
       'date': date,
       'amount': amount,
+      'convertedAmount': convertedAmount,
       'receipt': receipt,
     };
   }
@@ -49,6 +58,8 @@ class ExpenseModel {
       ),
       date: (map['date'] ?? '') as String,
       amount: (map['amount'] ?? '') as String,
+      convertedAmount: (map['convertedAmount'] ?? '') as String,
+      currency: (map['currency'] ?? '') as String,
       receipt: (map['receipt'] ?? '') as String,
     );
   }

@@ -25,6 +25,7 @@ class AddExpensePage extends StatefulWidget {
 class _AddExpensePageState extends State<AddExpensePage> {
   late AddExpenseBloc bloc;
   var selectedCategory = ValueNotifier(CategoryModel());
+  var selectedCurrency = ValueNotifier('LE');
   var selectedCategoryIcon = ValueNotifier('');
   var selectedImagePath = ValueNotifier('');
   List<CategoryModel> categories = [
@@ -100,6 +101,25 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     },
                   ),
                   Text(
+                    'Currency',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  CustomDropdown<String>(
+                    closedHeaderPadding: EdgeInsets.symmetric(
+                      vertical: 16.h,
+                      horizontal: 12.w,
+                    ),
+                    decoration: CustomDropdownDecoration(
+                      closedFillColor: kGrey3,
+                    ),
+                    items: ['USD', 'EGP', 'AED', 'SAR'],
+                    onChanged: (p0) {
+                      selectedCurrency.value = p0!;
+                    },
+                  ),
+                  Text(
                     'Amount',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -108,7 +128,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   TextInput(
                     controller: amountController,
                     inputType: TextInputType.number,
-                    hint: r'$50,000',
+                    hint: r'LE 50,000',
                   ),
                   Text(
                     'Date',
@@ -233,6 +253,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
                         category: selectedCategory.value.copyWith(
                           icon: selectedCategoryIcon.value,
                         ),
+                        currency: selectedCurrency.value,
+                        convertedAmount: amountController.text,
                         date: dateController.text,
                         amount: amountController.text,
                         receipt: selectedImagePath.value,

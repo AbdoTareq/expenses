@@ -17,8 +17,10 @@ class MockedNetworkImpl implements MockedNetwork {
       success: true,
       data: [
         ExpenseModel(
+          currency: 'EGP',
           id: '1',
           amount: '-100',
+          convertedAmount: '-2',
           date: 'Today 12:00 pm',
           category: CategoryModel(
             color: '#ff1b55f3',
@@ -28,8 +30,10 @@ class MockedNetworkImpl implements MockedNetwork {
           receipt: '',
         ),
         ExpenseModel(
+          currency: 'EGP',
           id: '2',
           amount: '-100',
+          convertedAmount: '-2',
           date: 'Today 12:00 pm',
           category: CategoryModel(
             color: '#ffffb74d',
@@ -39,8 +43,10 @@ class MockedNetworkImpl implements MockedNetwork {
           receipt: '',
         ),
         ExpenseModel(
+          currency: 'EGP',
           id: '3',
           amount: '-100',
+          convertedAmount: '-2',
           date: 'Today 12:00 pm',
           category: CategoryModel(
             color: '#ff5777d1',
@@ -50,8 +56,10 @@ class MockedNetworkImpl implements MockedNetwork {
           receipt: '',
         ),
         ExpenseModel(
+          currency: 'EGP',
           id: '4',
           amount: '-100',
+          convertedAmount: '-2',
           date: 'Today 12:00 pm',
           category: CategoryModel(
             color: '#fffad8b8',
