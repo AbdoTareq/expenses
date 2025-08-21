@@ -1,9 +1,11 @@
-class CategoryModel {
+import 'package:equatable/equatable.dart';
+
+class CategoryModel extends Equatable {
   final String name;
   final String icon;
   final String color;
   final String id;
-  CategoryModel({
+  const CategoryModel({
     this.name = '',
     this.icon = '',
     this.color = '',
@@ -44,6 +46,9 @@ class CategoryModel {
 
   @override
   String toString() {
-    return 'CategoryModel(name: $name, icon: $icon, color: $color, id: $id)';
+    return name;
   }
+
+  @override
+  List<Object?> get props => [name, icon, color];
 }

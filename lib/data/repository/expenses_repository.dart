@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:expenses/core/constants/constants.dart';
 import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:logger/web.dart';
 
@@ -10,7 +11,7 @@ import 'package:expenses/core/error/failures.dart';
 import 'package:expenses/data/model/expense_model.dart';
 
 abstract class ExpensesRepository {
-  Future<Either<Failure, List<ExpenseModel>>> getExpenses(String filter);
+  Future<Either<Failure, ExpensesWrapper>> getExpenses(String filter);
   Future<Either<Failure, void>> addExpense(ExpenseModel expense);
 }
 
@@ -28,44 +29,35 @@ class ExpensesRepositoryImp extends ExpensesRepository {
   });
 
   @override
-  Future<Either<Failure, List<ExpenseModel>>> getExpenses(String filter) async {
+  Future<Either<Failure, ExpensesWrapper>> getExpenses(String filter) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await remote.get(Endpoints.expenses);
         if (result.statusCode == 200) {
-          return Right(
-            (result.data as List)
-                .map((expense) => ExpenseModel.fromJson(expense))
-                .toList(),
-          );
+          final Map<dynamic, dynamic> res =
+              (await local.read(kExpenses) as Map<dynamic, dynamic>);
+          return Right(ExpensesWrapper.fromJson(res));
         }
         return const Left(ServerFailure(message: 'server error', data: null));
       } catch (e) {
         Logger().e(e);
-        if (await local.containsKey('expenses')) {
+        if (await local.containsKey(kExpenses)) {
           Logger().i('cashed Data');
-          final List<dynamic> res =
-              (await local.read('expenses')
-                  as Map<dynamic, dynamic>)['expenses'];
-          return Right(
-            res.map((expense) => ExpenseModel.fromJson(expense)).toList(),
-          );
+          final Map<dynamic, dynamic> res =
+              (await local.read(kExpenses) as Map<dynamic, dynamic>);
+          return Right(ExpensesWrapper.fromJson(res));
         } else {
           Logger().i('mocked Data');
           final mockedRes = await mocked.getExpense(filter);
-          local.write('expenses', {
-            'expenses': mockedRes.map((expense) => expense.toJson()).toList(),
-          });
+          local.write(kExpenses, mockedRes.toJson());
           return Right(mockedRes);
         }
       }
     } else {
-      if (await local.containsKey('expenses')) {
-        final List<dynamic> res =
-            (await local.read('expenses') as Map<dynamic, dynamic>)['expenses'];
-        return Right(
-          res.map((expense) => ExpenseModel.fromJson(expense)).toList(),
-        );
+      if (await local.containsKey(kExpenses)) {
+        final Map<dynamic, dynamic> res =
+            (await local.read(kExpenses) as Map<dynamic, dynamic>);
+        return Right(ExpensesWrapper.fromJson(res));
       }
       return const Left(
         OfflineFailure(message: 'please connect to internet', data: null),
@@ -76,15 +68,12 @@ class ExpensesRepositoryImp extends ExpensesRepository {
   @override
   Future<Either<Failure, void>> addExpense(ExpenseModel expense) async {
     if (await networkInfo.isConnected) {
-      if (await local.containsKey('expenses')) {
-        final List<dynamic> res =
-            (await local.read('expenses') as Map<dynamic, dynamic>)['expenses'];
-        var list =
-            res.map((expense) => ExpenseModel.fromJson(expense)).toList();
-        list.add(expense);
-        local.write('expenses', {
-          'expenses': list.map((expense) => expense.toJson()).toList(),
-        });
+      if (await local.containsKey(kExpenses)) {
+        final Map<dynamic, dynamic> res =
+            (await local.read(kExpenses) as Map<dynamic, dynamic>);
+        var wrapper = ExpensesWrapper.fromJson(res);
+        wrapper.data?.add(expense);
+        local.write(kExpenses, wrapper.toJson());
         return Right(null);
       } else {
         return const Left(ServerFailure(message: 'server error', data: null));

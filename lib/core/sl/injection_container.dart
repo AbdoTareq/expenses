@@ -1,24 +1,29 @@
 import 'package:dio/dio.dart';
-import 'package:expenses/core/datasources/local/local_data_source.dart';
+import 'package:expenses/bloc/add_expense/add_expense_bloc.dart';
 import 'package:expenses/bloc/dashboard/dashboard_bloc.dart';
-import 'package:expenses/data/repository/dashboard_repository.dart';
+import 'package:expenses/core/datasources/local/local_data_source.dart';
+import 'package:expenses/core/datasources/remote/network.dart';
+import 'package:expenses/core/datasources/remote/network_info.dart';
+import 'package:expenses/core/services/file_picker_manager.dart';
+import 'package:expenses/data/repository/expenses_repository.dart';
 import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:requests_inspector/requests_inspector.dart';
-import 'package:expenses/core/datasources/remote/network.dart';
-import 'package:expenses/core/datasources/remote/network_info.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
   // Bloc
   sl.registerLazySingleton(() => DashboardBloc(repository: sl()));
+  sl.registerFactory(
+    () => AddExpenseBloc(repository: sl(), pickerManager: sl()),
+  );
 
   // Repository
-  sl.registerLazySingleton<DashboardRepository>(
-    () => DashboardRepositoryImp(
+  sl.registerLazySingleton<ExpensesRepository>(
+    () => ExpensesRepositoryImp(
       remote: sl(),
       local: sl(),
       networkInfo: sl(),
@@ -36,6 +41,7 @@ Future<void> init() async {
   sl.registerLazySingleton<NetworkInfo>(
     () => NetworkInfoImpl(connectionChecker: sl()),
   );
+  sl.registerLazySingleton<PickerManager>(() => FilePickerManager());
 
   //! External
   sl.registerLazySingleton(() => InternetConnectionChecker.createInstance());

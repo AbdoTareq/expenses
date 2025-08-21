@@ -1,3 +1,4 @@
+import 'package:expenses/core/extensions/string_extension.dart';
 import 'package:expenses/data/model/expense_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,9 +7,6 @@ class ExpenseItem extends StatelessWidget {
   final ExpenseModel item;
 
   const ExpenseItem({super.key, required this.item});
-
-  Color getColorFromHex(String color) =>
-      Color(int.parse(color.toString().replaceAll('#', '0xff')));
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +32,12 @@ class ExpenseItem extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: (getColorFromHex(
-                  item.category.color,
-                )).withValues(alpha: 0.2),
+                backgroundColor: item.category.color
+                    .getColorFromHex()
+                    .withValues(alpha: 0.2),
                 child: Icon(
-                  getIconFromString(item.category.icon),
-                  color: (getColorFromHex(item.category.color)),
+                  item.category.icon.getIconFromString(),
+                  color: item.category.color.getColorFromHex(),
                   size: 22,
                 ),
               ),
@@ -84,18 +82,5 @@ class ExpenseItem extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  IconData? getIconFromString(String icon) {
-    switch (icon) {
-      case 'home':
-        return Icons.home;
-      case 'movie':
-        return Icons.movie;
-      case 'shopping_cart':
-        return Icons.shopping_cart;
-      default:
-        return Icons.directions_car;
-    }
   }
 }

@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:expenses/core/constants/status.dart';
 import 'package:expenses/data/model/expense_model.dart';
-import 'package:expenses/data/repository/dashboard_repository.dart';
+import 'package:expenses/data/repository/expenses_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
 class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
-  final DashboardRepository repository;
+  final ExpensesRepository repository;
   DashboardBloc({required this.repository})
     : super(DashboardState(status: RxStatus.initial)) {
     on<GetExpenses>(_getExpenses);
@@ -28,7 +28,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           (l) =>
               state.copyWith(status: RxStatus.error, errorMessage: l.message),
           (r) => DashboardState(
-            status: r.isEmpty ? RxStatus.empty : RxStatus.success,
+            status: (r.data ?? []).isEmpty ? RxStatus.empty : RxStatus.success,
             expenses: r,
           ),
         ),

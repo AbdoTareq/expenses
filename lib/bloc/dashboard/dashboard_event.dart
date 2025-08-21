@@ -9,7 +9,8 @@ sealed class DashboardEvent extends Equatable {
 
 class GetExpenses extends DashboardEvent {
   final String filter;
-  const GetExpenses({this.filter = 'this month'});
+  final num page;
+  const GetExpenses({this.page = 1, this.filter = 'this month'});
 
   @override
   List<Object> get props => [];

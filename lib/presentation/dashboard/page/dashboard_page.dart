@@ -1,13 +1,19 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:expenses/core/constants/colors.dart';
 import 'package:expenses/core/constants/status.dart';
+import 'package:expenses/core/router/app_routes.dart';
 import 'package:expenses/core/sl/injection_container.dart';
 import 'package:expenses/bloc/dashboard/dashboard_bloc.dart';
+import 'package:expenses/data/model/expense_model.dart';
 import 'package:expenses/presentation/dashboard/widgets/balance_card.dart';
+import 'package:expenses/presentation/dashboard/widgets/custom_paged_list_view.dart';
 import 'package:expenses/presentation/dashboard/widgets/expense_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:logger/web.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -18,11 +24,38 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   late DashboardBloc bloc;
+  final PagingController<int, ExpenseModel> pagingController = PagingController(
+    firstPageKey: 1,
+  );
+  int page = 1;
 
   @override
   void initState() {
-    bloc = sl<DashboardBloc>()..add(GetExpenses());
+    bloc = sl<DashboardBloc>();
+    pagingController.addPageRequestListener((pageKey) {
+      page = pageKey;
+      bloc.add(GetExpenses(page: page));
+    });
     super.initState();
+  }
+
+  onSuccess(context, DashboardState state) {
+    if (state.status == RxStatus.success) {
+      final wrapper = state.expenses!;
+      num? lastPage = (wrapper.total ?? 1) / (wrapper.limit ?? 1);
+      int currentPage = pagingController.nextPageKey ?? 1;
+      if (currentPage >= lastPage) {
+        pagingController.appendLastPage(wrapper.data ?? []);
+      } else {
+        pagingController.appendPage(wrapper.data ?? [], currentPage + 1);
+      }
+    } else if (state.status == RxStatus.error) {
+      Logger().i(state.errorMessage);
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to add expense')));
+      pagingController.error = state.errorMessage;
+    }
   }
 
   @override
@@ -31,6 +64,16 @@ class _DashboardPageState extends State<DashboardPage> {
       create: (context) => bloc,
       child: Scaffold(
         backgroundColor: kBGColor,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final res = await context.pushNamed(Routes.addExpense);
+            if (res == 'updated') {
+              pagingController.refresh();
+            }
+          },
+          backgroundColor: kPrimaryColor,
+          child: Icon(Icons.add, color: kWhiteColor),
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -116,27 +159,15 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             SizedBox(height: 20.h),
             Expanded(
-              child: BlocBuilder<DashboardBloc, DashboardState>(
-                builder: (context, state) {
-                  if (state.status == RxStatus.loading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state.status == RxStatus.empty) {
-                    return Center(child: Text('No expenses found'));
-                  } else if (state.status == RxStatus.error) {
-                    return Center(child: Text(state.errorMessage.toString()));
-                  } else {
-                    return ListView.separated(
-                      padding: EdgeInsets.zero,
-                      itemCount: state.expenses?.length ?? 0,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(height: 10.h);
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return ExpenseItem(item: state.expenses![index]);
-                      },
-                    );
-                  }
-                },
+              child: BlocListener<DashboardBloc, DashboardState>(
+                listener: (context, state) => onSuccess(context, state),
+                child: CustomPagedListView(
+                  pagingController: pagingController,
+                  padding: EdgeInsets.only(bottom: 100.h),
+                  itemBuilder: (context, item, index) {
+                    return ExpenseItem(item: item);
+                  },
+                ),
               ),
             ),
           ],

@@ -2,7 +2,7 @@ part of 'dashboard_bloc.dart';
 
 class DashboardState extends Equatable {
   final RxStatus status;
-  final List<ExpenseModel>? expenses;
+  final ExpensesWrapper? expenses;
   final String? errorMessage;
 
   const DashboardState({
@@ -13,7 +13,7 @@ class DashboardState extends Equatable {
 
   DashboardState copyWith({
     RxStatus? status,
-    List<ExpenseModel>? expenses,
+    ExpensesWrapper? expenses,
     String? errorMessage,
   }) {
     return DashboardState(
