@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:expenses/core/constants/colors.dart';
 import 'package:expenses/core/constants/status.dart';
+import 'package:expenses/core/extensions/string_extension.dart';
 import 'package:expenses/core/router/app_routes.dart';
 import 'package:expenses/core/sl/injection_container.dart';
 import 'package:expenses/bloc/dashboard/dashboard_bloc.dart';
@@ -50,6 +53,8 @@ class _DashboardPageState extends State<DashboardPage> {
       } else {
         pagingController.appendPage(wrapper.data ?? [], currentPage + 1);
       }
+      var list = (wrapper.data ?? []).toSet();
+      pagingController.itemList = list.toList();
     } else if (state.status == RxStatus.error) {
       Logger().i(state.errorMessage);
       ScaffoldMessenger.of(
@@ -137,7 +142,35 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                 ),
-                Column(children: [SizedBox(height: 150.h), BalanceCard()]),
+                Column(
+                  children: [
+                    SizedBox(height: 150.h),
+                    BlocBuilder<DashboardBloc, DashboardState>(
+                      builder: (context, state) {
+                        if (state.status == RxStatus.loading) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: kWhiteColor,
+                            ),
+                          );
+                        } else if (state.status == RxStatus.success) {
+                          return BalanceCard(
+                            totalExpenses: state.expenses!.data!
+                                .map((e) => e.convertedAmount.toDouble)
+                                .toList()
+                                .reduce((value, element) => value + element),
+                          );
+                        } else {
+                          return Center(
+                            child: Text(
+                              state.errorMessage ?? 'Something went wrong',
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: 32.h),

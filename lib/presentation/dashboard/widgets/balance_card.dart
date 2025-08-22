@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BalanceCard extends StatelessWidget {
-  const BalanceCard({super.key});
+  const BalanceCard({super.key, required this.totalExpenses});
+  final num totalExpenses;
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +96,7 @@ class BalanceCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "\$ 1,884.00",
+                "\$ ${totalExpenses.toStringAsFixed(2)}",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.sp,

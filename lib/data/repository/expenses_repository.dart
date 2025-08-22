@@ -11,7 +11,7 @@ import 'package:expenses/core/error/failures.dart';
 import 'package:expenses/data/model/expense_model.dart';
 
 abstract class ExpensesRepository {
-  Future<Either<Failure, ExpensesWrapper>> getExpenses(String filter);
+  Future<Either<Failure, ExpensesWrapper>> getExpenses(int page, String filter);
   Future<Either<Failure, void>> addExpense(ExpenseModel expense);
 }
 
@@ -29,14 +29,15 @@ class ExpensesRepositoryImp extends ExpensesRepository {
   });
 
   @override
-  Future<Either<Failure, ExpensesWrapper>> getExpenses(String filter) async {
+  Future<Either<Failure, ExpensesWrapper>> getExpenses(
+    int page,
+    String filter,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remote.get(Endpoints.expenses);
+        final result = await remote.get('${Endpoints.expenses}?page=$page');
         if (result.statusCode == 200) {
-          final Map<dynamic, dynamic> res =
-              (await local.read(kExpenses) as Map<dynamic, dynamic>);
-          return Right(ExpensesWrapper.fromJson(res));
+          return Right(ExpensesWrapper.fromJson(result.data));
         }
         return const Left(ServerFailure(message: 'server error', data: null));
       } catch (e) {

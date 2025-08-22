@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 extension StringExtension on String {
   Color getColorFromHex() =>
       Color(int.parse(toString().replaceAll('#', '0xff')));
+  double get toDouble => double.tryParse(toString()) ?? 0.0;
 
   IconData? getIconFromString() {
     switch (this) {

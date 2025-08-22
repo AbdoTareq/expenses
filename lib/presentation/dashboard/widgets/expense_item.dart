@@ -65,7 +65,7 @@ class ExpenseItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                '${item.amount} ${item.currency} / ${item.convertedAmount} \$',
+                '- ${item.amount} ${item.currency} / ${item.convertedAmount} \$',
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.w600,

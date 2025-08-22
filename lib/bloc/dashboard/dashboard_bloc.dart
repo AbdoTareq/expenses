@@ -24,7 +24,10 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     try {
       Logger().i(event.filter);
       emit(state.copyWith(status: RxStatus.loading));
-      final res = await repository.getExpenses(event.filter);
+      final res = await repository.getExpenses(
+        event.page.toInt(),
+        event.filter,
+      );
       emit(
         res.fold(
           (l) =>

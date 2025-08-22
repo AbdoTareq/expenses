@@ -13,8 +13,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '1',
-        amount: '-100',
-        convertedAmount: '-2',
+        amount: '100',
+        convertedAmount: '2',
         date: 'Today 12:00 pm',
         category: CategoryModel(
           color: '#ff1b55f3',
@@ -26,8 +26,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '1',
-        amount: '-120',
-        convertedAmount: '-2',
+        amount: '120',
+        convertedAmount: '2',
         date: 'Last month',
         category: CategoryModel(
           color: '#ff1b55f3',
@@ -39,8 +39,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '1',
-        amount: '-120',
-        convertedAmount: '-2',
+        amount: '120',
+        convertedAmount: '2',
         date: 'Last year',
         category: CategoryModel(
           color: '#ff1b55f3',
@@ -52,8 +52,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '2',
-        amount: '-100',
-        convertedAmount: '-2',
+        amount: '100',
+        convertedAmount: '2',
         date: 'Today 12:00 pm',
         category: CategoryModel(
           color: '#ffffb74d',
@@ -65,8 +65,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '3',
-        amount: '-100',
-        convertedAmount: '-2',
+        amount: '100',
+        convertedAmount: '2',
         date: 'Today 12:00 pm',
         category: CategoryModel(
           color: '#ff5777d1',
@@ -78,8 +78,8 @@ class MockedNetworkImpl implements MockedNetwork {
       ExpenseModel(
         currency: 'EGP',
         id: '4',
-        amount: '-100',
-        convertedAmount: '-2',
+        amount: '100',
+        convertedAmount: '2',
         date: 'Today 12:00 pm',
         category: CategoryModel(
           color: '#fffad8b8',
@@ -90,7 +90,7 @@ class MockedNetworkImpl implements MockedNetwork {
       ),
     ];
     return ExpensesWrapper(
-      total: 8,
+      total: 6,
       limit: 4,
       page: 1,
       message: 'success',

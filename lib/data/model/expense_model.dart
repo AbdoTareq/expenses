@@ -1,6 +1,7 @@
+import 'package:equatable/equatable.dart';
 import 'package:expenses/data/model/category_model.dart';
 
-class ExpenseModel {
+class ExpenseModel extends Equatable {
   final String? id;
   final CategoryModel category;
   final String date;
@@ -68,6 +69,9 @@ class ExpenseModel {
   String toString() {
     return 'ExpenseModel(id: $id, category: $category, date: $date, amount: $amount, receipt: $receipt)';
   }
+
+  @override
+  List<Object?> get props => [id, date, amount];
 }
 
 class ExpensesWrapper {
