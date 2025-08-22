@@ -28,13 +28,14 @@ class _DashboardPageState extends State<DashboardPage> {
     firstPageKey: 1,
   );
   int page = 1;
+  String filter = 'This month';
 
   @override
   void initState() {
     bloc = sl<DashboardBloc>();
     pagingController.addPageRequestListener((pageKey) {
       page = pageKey;
-      bloc.add(GetExpenses(page: page));
+      bloc.add(GetExpenses(page: page, filter: filter));
     });
     super.initState();
   }
@@ -126,7 +127,8 @@ class _DashboardPageState extends State<DashboardPage> {
                               initialItem: 'This month',
                               items: ['This month', 'Last month', 'Last year'],
                               onChanged: (p0) {
-                                bloc.add(GetExpenses(filter: p0!));
+                                filter = p0!;
+                                pagingController.refresh();
                               },
                             ),
                           ),

@@ -5,6 +5,7 @@ import 'package:expenses/core/constants/status.dart';
 import 'package:expenses/data/model/expense_model.dart';
 import 'package:expenses/data/repository/expenses_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/web.dart';
 
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
@@ -21,6 +22,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     Emitter<DashboardState> emit,
   ) async {
     try {
+      Logger().i(event.filter);
       emit(state.copyWith(status: RxStatus.loading));
       final res = await repository.getExpenses(event.filter);
       emit(

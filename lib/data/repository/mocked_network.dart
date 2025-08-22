@@ -8,67 +8,94 @@ abstract class MockedNetwork {
 class MockedNetworkImpl implements MockedNetwork {
   @override
   Future<ExpensesWrapper> getExpense(String filter) async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
+    var list = [
+      ExpenseModel(
+        currency: 'EGP',
+        id: '1',
+        amount: '-100',
+        convertedAmount: '-2',
+        date: 'Today 12:00 pm',
+        category: CategoryModel(
+          color: '#ff1b55f3',
+          icon: 'home',
+          name: 'Groceries',
+        ),
+        receipt: '',
+      ),
+      ExpenseModel(
+        currency: 'EGP',
+        id: '1',
+        amount: '-120',
+        convertedAmount: '-2',
+        date: 'Last month',
+        category: CategoryModel(
+          color: '#ff1b55f3',
+          icon: 'home',
+          name: 'Groceries',
+        ),
+        receipt: '',
+      ),
+      ExpenseModel(
+        currency: 'EGP',
+        id: '1',
+        amount: '-120',
+        convertedAmount: '-2',
+        date: 'Last year',
+        category: CategoryModel(
+          color: '#ff1b55f3',
+          icon: 'home',
+          name: 'Groceries',
+        ),
+        receipt: '',
+      ),
+      ExpenseModel(
+        currency: 'EGP',
+        id: '2',
+        amount: '-100',
+        convertedAmount: '-2',
+        date: 'Today 12:00 pm',
+        category: CategoryModel(
+          color: '#ffffb74d',
+          icon: 'movie',
+          name: 'Entertainment',
+        ),
+        receipt: '',
+      ),
+      ExpenseModel(
+        currency: 'EGP',
+        id: '3',
+        amount: '-100',
+        convertedAmount: '-2',
+        date: 'Today 12:00 pm',
+        category: CategoryModel(
+          color: '#ff5777d1',
+          icon: 'directions_car',
+          name: 'Transportation',
+        ),
+        receipt: '',
+      ),
+      ExpenseModel(
+        currency: 'EGP',
+        id: '4',
+        amount: '-100',
+        convertedAmount: '-2',
+        date: 'Today 12:00 pm',
+        category: CategoryModel(
+          color: '#fffad8b8',
+          icon: 'shopping_cart',
+          name: 'Rent',
+        ),
+        receipt: '',
+      ),
+    ];
     return ExpensesWrapper(
       total: 8,
       limit: 4,
       page: 1,
       message: 'success',
       success: true,
-      data: [
-        ExpenseModel(
-          currency: 'EGP',
-          id: '1',
-          amount: '-100',
-          convertedAmount: '-2',
-          date: 'Today 12:00 pm',
-          category: CategoryModel(
-            color: '#ff1b55f3',
-            icon: 'home',
-            name: 'Groceries',
-          ),
-          receipt: '',
-        ),
-        ExpenseModel(
-          currency: 'EGP',
-          id: '2',
-          amount: '-100',
-          convertedAmount: '-2',
-          date: 'Today 12:00 pm',
-          category: CategoryModel(
-            color: '#ffffb74d',
-            icon: 'movie',
-            name: 'Entertainment',
-          ),
-          receipt: '',
-        ),
-        ExpenseModel(
-          currency: 'EGP',
-          id: '3',
-          amount: '-100',
-          convertedAmount: '-2',
-          date: 'Today 12:00 pm',
-          category: CategoryModel(
-            color: '#ff5777d1',
-            icon: 'directions_car',
-            name: 'Transportation',
-          ),
-          receipt: '',
-        ),
-        ExpenseModel(
-          currency: 'EGP',
-          id: '4',
-          amount: '-100',
-          convertedAmount: '-2',
-          date: 'Today 12:00 pm',
-          category: CategoryModel(
-            color: '#fffad8b8',
-            icon: 'shopping_cart',
-            name: 'Rent',
-          ),
-          receipt: '',
-        ),
-      ],
+      data: list,
     );
   }
 }

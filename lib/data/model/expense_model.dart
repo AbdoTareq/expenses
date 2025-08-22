@@ -113,4 +113,22 @@ class ExpensesWrapper {
     data['total'] = this.total;
     return data;
   }
+
+  ExpensesWrapper copyWith({
+    bool? success,
+    String? message,
+    List<ExpenseModel>? data,
+    num? page,
+    num? limit,
+    num? total,
+  }) {
+    return ExpensesWrapper(
+      success: success ?? this.success,
+      message: message ?? this.message,
+      data: data ?? this.data,
+      page: page ?? this.page,
+      limit: limit ?? this.limit,
+      total: total ?? this.total,
+    );
+  }
 }

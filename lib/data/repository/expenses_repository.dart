@@ -42,10 +42,7 @@ class ExpensesRepositoryImp extends ExpensesRepository {
       } catch (e) {
         Logger().e(e);
         if (await local.containsKey(kExpenses)) {
-          Logger().i('cashed Data');
-          final Map<dynamic, dynamic> res =
-              (await local.read(kExpenses) as Map<dynamic, dynamic>);
-          return Right(ExpensesWrapper.fromJson(res));
+          return Right(await _getCashed(filter));
         } else {
           Logger().i('mocked Data');
           final mockedRes = await mocked.getExpense(filter);
@@ -55,14 +52,30 @@ class ExpensesRepositoryImp extends ExpensesRepository {
       }
     } else {
       if (await local.containsKey(kExpenses)) {
-        final Map<dynamic, dynamic> res =
-            (await local.read(kExpenses) as Map<dynamic, dynamic>);
-        return Right(ExpensesWrapper.fromJson(res));
+        return Right(await _getCashed(filter));
       }
       return const Left(
         OfflineFailure(message: 'please connect to internet', data: null),
       );
     }
+  }
+
+  Future<ExpensesWrapper> _getCashed(String filter) async {
+    Logger().i('cashed Data');
+    final Map<dynamic, dynamic> res =
+        (await local.read(kExpenses) as Map<dynamic, dynamic>);
+    var wrapper = ExpensesWrapper.fromJson(res);
+    return wrapper.copyWith(
+      data:
+          wrapper.data
+              ?.where(
+                (e) =>
+                    filter == 'This month'
+                        ? e.date.contains('Today') || e.date.contains('-')
+                        : e.date.contains(filter),
+              )
+              .toList(),
+    );
   }
 
   @override

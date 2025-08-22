@@ -114,7 +114,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     decoration: CustomDropdownDecoration(
                       closedFillColor: kGrey3,
                     ),
-                    items: ['USD', 'EGP', 'AED', 'SAR'],
+                    items: ['EGP', 'AED', 'SAR'],
                     onChanged: (p0) {
                       selectedCurrency.value = p0!;
                     },
