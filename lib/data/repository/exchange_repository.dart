@@ -6,20 +6,18 @@ import 'package:expenses/core/datasources/remote/network.dart';
 import 'package:expenses/core/datasources/remote/network_info.dart';
 import 'package:expenses/core/error/failures.dart';
 import 'package:expenses/data/model/exchange_wrapper.dart';
-import 'package:expenses/data/model/expense_model.dart';
-import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:logger/web.dart';
 
-abstract class ExpensesRepository {
+abstract class ExchangeRepository {
   Future<Either<Failure, ExchangeWrapper>> getExchangeRates();
 }
 
-class ExpensesRepositoryImp extends ExpensesRepository {
+class ExchangeRepositoryImp extends ExchangeRepository {
   final NetworkInterface remote;
   final LocalDataSource local;
   final NetworkInfo networkInfo;
 
-  ExpensesRepositoryImp({
+  ExchangeRepositoryImp({
     required this.remote,
     required this.local,
     required this.networkInfo,

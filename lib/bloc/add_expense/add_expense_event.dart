@@ -9,7 +9,8 @@ sealed class ExpensesEvent extends Equatable {
 
 class AddExpenseEvent extends ExpensesEvent {
   final ExpenseModel expenseModel;
-  const AddExpenseEvent(this.expenseModel);
+  final ExchangeWrapper exchangeWrapper;
+  const AddExpenseEvent(this.expenseModel, this.exchangeWrapper);
 
   @override
   List<Object> get props => [];

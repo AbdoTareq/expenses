@@ -2,9 +2,9 @@ class ExchangeWrapper {
   String? result;
   String? documentation;
   String? termsOfUse;
-  int? timeLastUpdateUnix;
+  num? timeLastUpdateUnix;
   String? timeLastUpdateUtc;
-  int? timeNextUpdateUnix;
+  num? timeNextUpdateUnix;
   String? timeNextUpdateUtc;
   String? baseCode;
   ConversionRates? conversionRates;
@@ -54,8 +54,8 @@ class ExchangeWrapper {
 }
 
 class ConversionRates {
-  int? uSD;
-  double? aED;
+  num? uSD;
+  num? aED;
   double? aFN;
   double? aLL;
   double? aMD;
@@ -66,20 +66,20 @@ class ConversionRates {
   double? aWG;
   double? aZN;
   double? bAM;
-  int? bBD;
+  num? bBD;
   double? bDT;
   double? bGN;
   double? bHD;
   double? bIF;
-  int? bMD;
+  num? bMD;
   double? bND;
   double? bOB;
   double? bRL;
-  int? bSD;
+  num? bSD;
   double? bTN;
   double? bWP;
   double? bYN;
-  int? bZD;
+  num? bZD;
   double? cAD;
   double? cDF;
   double? cHF;
@@ -87,7 +87,7 @@ class ConversionRates {
   double? cNY;
   double? cOP;
   double? cRC;
-  int? cUP;
+  num? cUP;
   double? cVE;
   double? cZK;
   double? dJF;
@@ -95,7 +95,7 @@ class ConversionRates {
   double? dOP;
   double? dZD;
   double? eGP;
-  int? eRN;
+  num? eRN;
   double? eTB;
   double? eUR;
   double? fJD;
@@ -136,7 +136,7 @@ class ConversionRates {
   double? kYD;
   double? kZT;
   double? lAK;
-  int? lBP;
+  num? lBP;
   double? lKR;
   double? lRD;
   double? lSL;
@@ -162,7 +162,7 @@ class ConversionRates {
   double? nPR;
   double? nZD;
   double? oMR;
-  int? pAB;
+  num? pAB;
   double? pEN;
   double? pGK;
   double? pHP;

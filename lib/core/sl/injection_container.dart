@@ -5,6 +5,7 @@ import 'package:expenses/core/datasources/local/local_data_source.dart';
 import 'package:expenses/core/datasources/remote/network.dart';
 import 'package:expenses/core/datasources/remote/network_info.dart';
 import 'package:expenses/core/services/file_picker_manager.dart';
+import 'package:expenses/data/repository/exchange_repository.dart';
 import 'package:expenses/data/repository/expenses_repository.dart';
 import 'package:expenses/data/repository/mocked_network.dart';
 import 'package:get_it/get_it.dart';
@@ -18,7 +19,11 @@ Future<void> init() async {
   // Bloc
   sl.registerLazySingleton(() => DashboardBloc(repository: sl()));
   sl.registerFactory(
-    () => AddExpenseBloc(repository: sl(), pickerManager: sl()),
+    () => AddExpenseBloc(
+      repository: sl(),
+      pickerManager: sl(),
+      exchangeRepository: sl(),
+    ),
   );
 
   // Repository
@@ -29,6 +34,9 @@ Future<void> init() async {
       networkInfo: sl(),
       mocked: sl(),
     ),
+  );
+  sl.registerLazySingleton<ExchangeRepository>(
+    () => ExchangeRepositoryImp(remote: sl(), local: sl(), networkInfo: sl()),
   );
 
   // Datasources

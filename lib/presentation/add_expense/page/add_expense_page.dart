@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:logger/web.dart';
 
 class AddExpensePage extends StatefulWidget {
   const AddExpensePage({super.key});
@@ -96,6 +95,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       closedFillColor: kGrey3,
                     ),
                     items: categories,
+                    validator: (p0) => p0 == null ? 'Required' : null,
                     onChanged: (p0) {
                       selectedCategory.value = p0!;
                     },
@@ -115,7 +115,8 @@ class _AddExpensePageState extends State<AddExpensePage> {
                       closedFillColor: kGrey3,
                     ),
                     items: ['EGP', 'AED', 'SAR'],
-                    onChanged: (p0) {
+                    validator: (p0) => p0 == null ? 'Required' : null,
+                    onChanged: (p0) async {
                       selectedCurrency.value = p0!;
                     },
                   ),
@@ -126,6 +127,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     ),
                   ),
                   TextInput(
+                    validate: (p0) => p0!.isEmpty ? 'Required' : null,
                     controller: amountController,
                     inputType: TextInputType.number,
                     hint: r'LE 50,000',
@@ -137,6 +139,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
                     ),
                   ),
                   TextInput(
+                    validate: (p0) => p0!.isEmpty ? 'Required' : null,
                     controller: dateController,
                     hint: '02/01/24',
                     disableInput: true,
@@ -245,21 +248,32 @@ class _AddExpensePageState extends State<AddExpensePage> {
                   ),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  bloc.add(
-                    AddExpenseEvent(
-                      ExpenseModel(
-                        category: selectedCategory.value.copyWith(
-                          icon: selectedCategoryIcon.value,
+                  final res = await bloc.getRates();
+                  res.fold(
+                    (l) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(l.message)));
+                    },
+                    (r) {
+                      bloc.add(
+                        AddExpenseEvent(
+                          ExpenseModel(
+                            category: selectedCategory.value.copyWith(
+                              icon: selectedCategoryIcon.value,
+                            ),
+                            currency: selectedCurrency.value,
+                            convertedAmount: amountController.text,
+                            date: dateController.text,
+                            amount: amountController.text,
+                            receipt: selectedImagePath.value,
+                          ),
+                          r,
                         ),
-                        currency: selectedCurrency.value,
-                        convertedAmount: amountController.text,
-                        date: dateController.text,
-                        amount: amountController.text,
-                        receipt: selectedImagePath.value,
-                      ),
-                    ),
+                      );
+                    },
                   );
                 }
               },

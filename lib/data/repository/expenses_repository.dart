@@ -87,7 +87,7 @@ class ExpensesRepositoryImp extends ExpensesRepository {
             (await local.read(kExpenses) as Map<dynamic, dynamic>);
         var wrapper = ExpensesWrapper.fromJson(res);
         wrapper.data?.add(expense);
-        local.write(kExpenses, wrapper.toJson());
+        await local.write(kExpenses, wrapper.toJson());
         return Right(null);
       } else {
         return const Left(ServerFailure(message: 'server error', data: null));
