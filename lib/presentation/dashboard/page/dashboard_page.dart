@@ -197,6 +197,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: BlocListener<DashboardBloc, DashboardState>(
                 listener: (context, state) => onSuccess(context, state),
                 child: CustomPagedListView(
+                  tryAgainEvent: () => pagingController.refresh(),
                   pagingController: pagingController,
                   padding: EdgeInsets.only(bottom: 100.h),
                   itemBuilder: (context, item, index) {
