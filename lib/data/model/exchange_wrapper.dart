@@ -21,7 +21,7 @@ class ExchangeWrapper {
     this.conversionRates,
   });
 
-  ExchangeWrapper.fromJson(Map<String, dynamic> json) {
+  ExchangeWrapper.fromJson(Map<dynamic, dynamic> json) {
     result = json['result'];
     documentation = json['documentation'];
     termsOfUse = json['terms_of_use'];
