@@ -34,7 +34,8 @@ exchange rates page: ![alt text](image-2.png)
     1. `flutter pub get`
     2. `flutter run`
 - Any known bugs or unimplemented features:
-    No known bugs & No testing features included
+    No known bugs & only exchange repository test
+    ![alt text](image-3.png)
 
 Bonus (Optional)
 

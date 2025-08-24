@@ -1,0 +1,224 @@
+import 'package:dio/dio.dart';
+import 'package:expenses/core/datasources/local/local_data_source.dart';
+import 'package:expenses/core/datasources/remote/endpoints.dart';
+import 'package:expenses/core/datasources/remote/network.dart';
+import 'package:expenses/core/datasources/remote/network_info.dart';
+import 'package:expenses/data/repository/exchange_repository.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockRemoteDataSource extends Mock implements NetworkInterface {}
+
+class MockLocalDataSource extends Mock implements LocalDataSource {}
+
+class MockNetworkInfoSource extends Mock implements NetworkInfo {}
+
+void main() {
+  late ExchangeRepositoryImp repoImp;
+  late MockRemoteDataSource mockRemoteDataSource;
+  late MockLocalDataSource mockLocalDataSource;
+  late MockNetworkInfoSource mockNetworkInfoSource;
+
+  setUp(() {
+    mockRemoteDataSource = MockRemoteDataSource();
+    mockLocalDataSource = MockLocalDataSource();
+    mockNetworkInfoSource = MockNetworkInfoSource();
+    repoImp = ExchangeRepositoryImp(
+      remote: mockRemoteDataSource,
+      local: mockLocalDataSource,
+      networkInfo: mockNetworkInfoSource,
+    );
+  });
+
+  test('Should get data from remote data source and return it', () async {
+    // Arrange
+    final serverResponse = Response(
+      data: {
+        "result": "success",
+        "documentation": "https://www.exchangerate-api.com/docs",
+        "terms_of_use": "https://www.exchangerate-api.com/terms",
+        "time_last_update_unix": 1755561601,
+        "time_last_update_utc": "Tue, 19 Aug 2025 00:00:01 +0000",
+        "time_next_update_unix": 1755648001,
+        "time_next_update_utc": "Wed, 20 Aug 2025 00:00:01 +0000",
+        "base_code": "USD",
+        "conversion_rates": {
+          "USD": 1,
+          "AED": 3.6725,
+          "AFN": 68.326,
+          "ALL": 83.2179,
+          "AMD": 383.2537,
+          "ANG": 1.79,
+          "AOA": 920.2909,
+          "ARS": 1298.83,
+          "AUD": 1.5393,
+          "AWG": 1.79,
+          "AZN": 1.7008,
+          "BAM": 1.6756,
+          "BBD": 2,
+          "BDT": 121.5051,
+          "BGN": 1.6756,
+          "BHD": 0.376,
+          "BIF": 2971.8063,
+          "BMD": 1,
+          "BND": 1.284,
+          "BOB": 6.9134,
+          "BRL": 5.4058,
+          "BSD": 1,
+          "BTN": 87.3846,
+          "BWP": 13.8531,
+          "BYN": 3.1929,
+          "BZD": 2,
+          "CAD": 1.3805,
+          "CDF": 2891.1706,
+          "CHF": 0.8071,
+          "CLP": 963.7659,
+          "CNY": 7.1851,
+          "COP": 4021.705,
+          "CRC": 505.545,
+          "CUP": 24,
+          "CVE": 94.4647,
+          "CZK": 20.9649,
+          "DJF": 177.721,
+          "DKK": 6.3937,
+          "DOP": 61.6079,
+          "DZD": 129.8001,
+          "EGP": 48.3691,
+          "ERN": 15,
+          "ETB": 140.0714,
+          "EUR": 0.8567,
+          "FJD": 2.2577,
+          "FKP": 0.7398,
+          "FOK": 6.3938,
+          "GBP": 0.7398,
+          "GEL": 2.6962,
+          "GGP": 0.7398,
+          "GHS": 11.3237,
+          "GIP": 0.7398,
+          "GMD": 72.8364,
+          "GNF": 8694.0127,
+          "GTQ": 7.6694,
+          "GYD": 209.2669,
+          "HKD": 7.8194,
+          "HNL": 26.2229,
+          "HRK": 6.4549,
+          "HTG": 130.8727,
+          "HUF": 338.4362,
+          "IDR": 16208.4503,
+          "ILS": 3.3821,
+          "IMP": 0.7398,
+          "INR": 87.3868,
+          "IQD": 1310.3956,
+          "IRR": 42437.6645,
+          "ISK": 122.5208,
+          "JEP": 0.7398,
+          "JMD": 160.1525,
+          "JOD": 0.709,
+          "JPY": 147.7589,
+          "KES": 129.2827,
+          "KGS": 87.2251,
+          "KHR": 4016.8825,
+          "KID": 1.5394,
+          "KMF": 421.4719,
+          "KRW": 1386.6044,
+          "KWD": 0.3056,
+          "KYD": 0.8333,
+          "KZT": 538.7162,
+          "LAK": 21681.7118,
+          "LBP": 89500,
+          "LKR": 300.9355,
+          "LRD": 200.538,
+          "LSL": 17.6312,
+          "LYD": 5.4099,
+          "MAD": 9.021,
+          "MDL": 16.6479,
+          "MGA": 4430.3372,
+          "MKD": 52.6685,
+          "MMK": 2102.2415,
+          "MNT": 3566.4402,
+          "MOP": 8.0539,
+          "MRU": 40.0311,
+          "MUR": 45.4244,
+          "MVR": 15.4428,
+          "MWK": 1743.7752,
+          "MXN": 18.7894,
+          "MYR": 4.2227,
+          "MZN": 63.7036,
+          "NAD": 17.6312,
+          "NGN": 1532.582,
+          "NIO": 36.8049,
+          "NOK": 10.2013,
+          "NPR": 139.8154,
+          "NZD": 1.6883,
+          "OMR": 0.3845,
+          "PAB": 1,
+          "PEN": 3.5548,
+          "PGK": 4.1843,
+          "PHP": 57.0261,
+          "PKR": 283.5204,
+          "PLN": 3.6419,
+          "PYG": 7377.9143,
+          "QAR": 3.64,
+          "RON": 4.333,
+          "RSD": 100.3926,
+          "RUB": 80.2907,
+          "RWF": 1450.0559,
+          "SAR": 3.75,
+          "SBD": 8.2232,
+          "SCR": 14.7101,
+          "SDG": 454.1011,
+          "SEK": 9.5604,
+          "SGD": 1.2839,
+          "SHP": 0.7398,
+          "SLE": 23.2343,
+          "SLL": 23234.2856,
+          "SOS": 571.7568,
+          "SRD": 37.5993,
+          "SSP": 4711.3647,
+          "STN": 20.9893,
+          "SYP": 12909.2362,
+          "SZL": 17.6312,
+          "THB": 32.4769,
+          "TJS": 9.3666,
+          "TMT": 3.5001,
+          "TND": 2.8788,
+          "TOP": 2.3533,
+          "TRY": 40.9019,
+          "TTD": 6.7586,
+          "TVD": 1.5394,
+          "TWD": 30.0139,
+          "TZS": 2572.1351,
+          "UAH": 41.2793,
+          "UGX": 3533.7735,
+          "UYU": 40.0186,
+          "UZS": 12583.3199,
+          "VES": 136.8931,
+          "VND": 26187.236,
+          "VUV": 118.8897,
+          "WST": 2.6948,
+          "XAF": 561.9625,
+          "XCD": 2.7,
+          "XCG": 1.79,
+          "XDR": 0.7306,
+          "XOF": 561.9625,
+          "XPF": 102.2325,
+          "YER": 240.3629,
+          "ZAR": 17.6257,
+          "ZMW": 23.3017,
+          "ZWL": 26.7807,
+        },
+      },
+      requestOptions: RequestOptions(),
+    );
+    when(
+      () => mockRemoteDataSource.get(Endpoints.rates),
+    ).thenAnswer((_) async => serverResponse);
+    when(() => mockNetworkInfoSource.isConnected).thenAnswer((_) async => true);
+
+    // Act
+    final result = await repoImp.getExchangeRates();
+
+    // Assert
+    result.fold((l) {}, (r) => expect(r.toJson(), equals(serverResponse.data)));
+  });
+}
